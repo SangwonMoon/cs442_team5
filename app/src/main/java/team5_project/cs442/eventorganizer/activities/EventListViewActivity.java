@@ -48,22 +48,27 @@ public class EventListViewActivity extends BaseActivity {
         mEventTypeText = (TextView) findViewById(R.id.eventType);
         mSpinnerLoc = (Spinner) findViewById(R.id.even_type_spinner);
 
-        mSpinnerLoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                eventType = position;
-                setmEventTypeText(eventType);
-                onResume();
-            }
+        if (mTuple.getKey().equals(Database.TAG_LOC)) {
+            mSpinnerLoc.setVisibility(View.GONE);
+            mEventTypeText.setText("Events at " + mTuple.getValue());
+        } else {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                eventType = 0;
-                setmEventTypeText(eventType);
-                onResume();
-            }
-        });
+            mSpinnerLoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                    eventType = position;
+                    setmEventTypeText(eventType);
+                    onResume();
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    eventType = 0;
+                    setmEventTypeText(eventType);
+                    onResume();
+                }
+            });
+        }
         listInstance = this;
     }
 
@@ -110,7 +115,12 @@ public class EventListViewActivity extends BaseActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getBaseContext(), UpdateActivity.class);
+                Intent i = null;
+                if(eventType == 4) {
+                    i = new Intent(getBaseContext(), UpdateActivity.class);
+                } else {
+                    i = new Intent(getBaseContext(), DetailActivity.class);
+                }
                 Event event = events.get(position);
                 i.putExtra("Event", event);
                 startActivity(i);
