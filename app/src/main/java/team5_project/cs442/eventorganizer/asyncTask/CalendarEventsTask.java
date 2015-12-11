@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team5_project.cs442.eventorganizer.activities.DetailActivity;
+import team5_project.cs442.eventorganizer.activities.MyEventDetailActivity;
 import team5_project.cs442.eventorganizer.activities.UpdateActivity;
 
 public class CalendarEventsTask extends AsyncTask<Void, Void, List<String>> {
@@ -26,15 +27,18 @@ public class CalendarEventsTask extends AsyncTask<Void, Void, List<String>> {
 
     private UpdateActivity updateActivity = null;
     private DetailActivity detailActivity = null;
+    private MyEventDetailActivity myeventdetailActivity = null;
     private Calendar service = null;
     private Exception error = null;
     private final boolean isUpdateEnable;
+    private final boolean isMyEventActivity;
 
     public CalendarEventsTask(UpdateActivity activity, GoogleAccountCredential credential) {
         this.updateActivity = activity;
         this.isUpdateEnable = true;
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        isMyEventActivity = false;
         service = new Calendar.Builder(transport, jsonFactory, credential)
                 .setApplicationName("IIT Event Organizer")
                 .build();
@@ -45,11 +49,22 @@ public class CalendarEventsTask extends AsyncTask<Void, Void, List<String>> {
         this.isUpdateEnable = false;
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        isMyEventActivity = false;
         service = new Calendar.Builder(transport, jsonFactory, credential)
                 .setApplicationName("IIT Event Organizer")
                 .build();
     }
 
+    public CalendarEventsTask(MyEventDetailActivity activity, GoogleAccountCredential credential) {
+        this.myeventdetailActivity = activity;
+        this.isUpdateEnable = true;
+        HttpTransport transport = AndroidHttp.newCompatibleTransport();
+        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+        isMyEventActivity = true;
+        service = new Calendar.Builder(transport, jsonFactory, credential)
+                .setApplicationName("IIT Event Organizer")
+                .build();
+    }
 
     @Override
     protected List<String> doInBackground(Void... params) {
@@ -88,9 +103,15 @@ public class CalendarEventsTask extends AsyncTask<Void, Void, List<String>> {
                             ((UserRecoverableAuthIOException) error).getIntent(),
                             UpdateActivity.REQUEST_AUTHORIZATION);
                 } else {
-                    detailActivity.startActivityForResult(
-                            ((UserRecoverableAuthIOException) error).getIntent(),
-                            UpdateActivity.REQUEST_AUTHORIZATION);
+                    if (isMyEventActivity) {
+                        myeventdetailActivity.startActivityForResult(
+                                ((UserRecoverableAuthIOException) error).getIntent(),
+                                UpdateActivity.REQUEST_AUTHORIZATION);
+                    } else {
+                        detailActivity.startActivityForResult(
+                                ((UserRecoverableAuthIOException) error).getIntent(),
+                                UpdateActivity.REQUEST_AUTHORIZATION);
+                    }
                 }
             } else {
                 // TODO: Show error

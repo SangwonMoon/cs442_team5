@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -28,6 +29,9 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.EventDateTime;
 
+import org.w3c.dom.Text;
+
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -50,7 +54,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
     private static final String TAG = "UpdateActivity";
 
-    private GoogleAccountCredential credential;
+    public static GoogleAccountCredential credential;
 
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
     private static final String PREF_ACCOUNT_NAME = "accountName";
@@ -58,15 +62,15 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     private SimpleDateFormat dateformat;
     private SimpleDateFormat timeformat;
 
-    private EditText mEditName;
-    private Spinner mSpinnerLoc;
+    private TextView mEditName;
+    private TextView mSpinnerLoc;
     private TextView mTextStartDate;
     private TextView mTextStartTime;
     private TextView mTextEndDate;
     private TextView mTextEndTime;
-    private EditText mEditDesc;
-    private EditText mEditHost;
-    private EditText mEditCost;
+    private TextView mEditDesc;
+    private TextView mEditHost;
+    private TextView mEditCost;
 
     private Button mBtnAddToCalendar;
 
@@ -90,25 +94,29 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         Intent intent = getIntent();
         mEvent = (Event) intent.getSerializableExtra("Event");
 
-        mEditName = (EditText) findViewById(R.id.editUpdateName);
-        mSpinnerLoc = (Spinner) findViewById(R.id.spinnerUpdateLoc);
+        mEditName = (TextView) findViewById(R.id.editUpdateName);
+        mSpinnerLoc = (TextView) findViewById(R.id.spinnerUpdateLoc);
         mTextStartDate = (TextView) findViewById(R.id.editUpdateStartDate);
         mTextStartTime = (TextView) findViewById(R.id.editUpdateStartTime);
         mTextEndDate = (TextView) findViewById(R.id.editUpdateEndDate);
         mTextEndTime = (TextView) findViewById(R.id.editUpdateEndTime);
-        mEditDesc = (EditText) findViewById(R.id.editUpdateDesc);
-        mEditHost = (EditText) findViewById(R.id.editUpdateHost);
-        mEditCost = (EditText) findViewById(R.id.editUpdateCost);
+        mEditDesc = (TextView) findViewById(R.id.editUpdateDesc);
+        mEditHost = (TextView) findViewById(R.id.editUpdateHost);
+        mEditCost = (TextView) findViewById(R.id.editUpdateCost);
         mBtnAddToCalendar = (Button) findViewById(R.id.btnAddToCalendar);
 
-        mEditName.setText(mEvent.getmEventName());
-        initLocation();
+        mEditName.setText(mEvent.getmEventName()+"\n");
+        mSpinnerLoc.setText(mEvent.getmEventLocation() + "\n");
         initDates();
-        mEditDesc.setText(mEvent.getmDescription());
-        mEditHost.setText(mEvent.getmHost());
-        mEditCost.setText(String.valueOf(mEvent.getmCost()));
+        mEditDesc.setText(mEvent.getmDescription()+"\n");
+        mEditHost.setText(mEvent.getmHost()+"\n");
 
-        EditText mEditEmail = (EditText) findViewById(R.id.editUpdateEmail);
+        if(mEvent.getmCost() != 0) {
+            DecimalFormat df = new DecimalFormat("$#.00");
+            mEditCost.setText(String.valueOf(df.format(mEvent.getmCost())));
+        } else  mEditCost.setText("FREE");
+
+        TextView mEditEmail = (TextView) findViewById(R.id.editUpdateEmail);
         mEditEmail.setText(mEvent.getmEventCreator());
         mEditEmail.setEnabled(false);
 
@@ -128,7 +136,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff())
-                .setSelectedAccountName(preferences.getString(PREF_ACCOUNT_NAME, null));
+                .setSelectedAccountName(preferences.getString(PREF_ACCOUNT_NAME, LoginActivity.accountname));
 
         mBtnAddToCalendar.setEnabled(false);
         mBtnAddToCalendar.setOnClickListener(this);
@@ -149,12 +157,14 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void refreshCalendar() {
-        if (following) {
+        if (following && !mBtnAddToCalendar.getText().equals("Already Added")) {
             mBtnAddToCalendar.setEnabled(false);
-            mBtnAddToCalendar.setText("Already added");
-        } else {
+            mBtnAddToCalendar.setText("Already Added");
+            mBtnAddToCalendar.setBackgroundColor(getApplication().getResources().getColor(R.color.grey));
+        } else if(!mBtnAddToCalendar.getText().equals("Add to Calender")){
             mBtnAddToCalendar.setEnabled(true);
-            mBtnAddToCalendar.setText("Add to calendar");
+            mBtnAddToCalendar.setText("Add to Calendar");
+            mBtnAddToCalendar.setBackgroundColor(getApplication().getResources().getColor(R.color.red));
         }
     }
 
@@ -240,7 +250,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
     private void updateEvent() {
         mEvent.setmEventName(mEditName.getText().toString());
-        mEvent.setmEventLocation(mSpinnerLoc.getSelectedItem().toString());
+        mEvent.setmEventLocation(mSpinnerLoc.getText().toString());
 
         Date start = mStartCal.getTime();
         String sDate = EventTimeChecker.formatter.format(start);
@@ -276,9 +286,9 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         if (index < 0) index = 0;
 
         ArrayAdapter<String> adaptLoc = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, locations);
-        mSpinnerLoc.setAdapter(adaptLoc);
+        //mSpinnerLoc.setAdapter(adaptLoc);
 
-        mSpinnerLoc.setSelection(index);
+//        mSpinnerLoc.setSelection(index);
     }
 
     private void initDates() {
@@ -292,9 +302,9 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         mEndCal.setTime(mEvent.getmEventEndTime());
 
         mTextStartDate.setText(dateformat.format(mStartCal.getTime()));
-        mTextStartTime.setText(timeformat.format(mStartCal.getTime()));
+        mTextStartTime.setText(timeformat.format(mStartCal.getTime())+"\n");
         mTextEndDate.setText(dateformat.format(mEndCal.getTime()));
-        mTextEndTime.setText(timeformat.format(mEndCal.getTime()));
+        mTextEndTime.setText(timeformat.format(mEndCal.getTime())+"\n");
     }
 
     private void initEditDate() {

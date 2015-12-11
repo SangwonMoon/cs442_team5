@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -50,11 +51,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
     private static final String TAG = "UpdateActivity";
 
-    private GoogleAccountCredential credential;
+    /**
+    public static GoogleAccountCredential credential;
 
     private static final String[] SCOPES = {CalendarScopes.CALENDAR};
     private static final String PREF_ACCOUNT_NAME = "accountName";
-
+    */
     private SimpleDateFormat dateformat;
     private SimpleDateFormat timeformat;
 
@@ -69,8 +71,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
     private EditText mEditCost;
 
     private Button mBtnUpdate;
-    private Button mBtnDelete;
-    private Button mBtnAddToCalendar;
+    // private Button mBtnCancel;
 
     private DatePickerDialog mStartDateDialog;
     private TimePickerDialog mStartTimeDialog;
@@ -102,8 +103,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         mEditHost = (EditText) findViewById(R.id.editUpdateHost);
         mEditCost = (EditText) findViewById(R.id.editUpdateCost);
         mBtnUpdate = (Button) findViewById(R.id.btnUpdate);
-        mBtnDelete = (Button) findViewById(R.id.btnDelete);
-        mBtnAddToCalendar = (Button) findViewById(R.id.btnAddToCalendar);
+        //  mBtnCancel = (Button) findViewById(R.id.btnCancel);
 
         mEditName.setText(mEvent.getmEventName());
         initLocation();
@@ -119,7 +119,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         if (mEvent.getmEventCreator().equals(email)) {
             initEditDate();
             mBtnUpdate.setOnClickListener(this);
-            mBtnDelete.setOnClickListener(this);
         } else {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             mEditName.setEnabled(false);
@@ -132,21 +131,18 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             mEditHost.setEnabled(false);
             mEditCost.setEnabled(false);
             mBtnUpdate.setEnabled(false);
-            mBtnDelete.setEnabled(false);
             mBtnUpdate.setVisibility(View.GONE);
-            mBtnDelete.setVisibility(View.GONE);
         }
-
+        /**
         SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
         credential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff())
-                .setSelectedAccountName(preferences.getString(PREF_ACCOUNT_NAME, null));
-
-        mBtnAddToCalendar.setEnabled(false);
-        mBtnAddToCalendar.setOnClickListener(this);
+                .setSelectedAccountName(preferences.getString(PREF_ACCOUNT_NAME, LoginActivity.accountname));
+         */
     }
 
+    /**
     @Override
     protected void onResume() {
         super.onResume();
@@ -159,16 +155,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             // TODO: Show error
         }
 
-    }
-
-    private void refreshCalendar() {
-        if (following) {
-            mBtnAddToCalendar.setEnabled(false);
-            mBtnAddToCalendar.setText("Already added");
-        } else {
-            mBtnAddToCalendar.setEnabled(true);
-            mBtnAddToCalendar.setText("Add to calendar");
-        }
     }
 
     @Override
@@ -209,7 +195,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-
+    */
     @Override
     public void onClick(View v) {
         if (v == mTextStartDate) {
@@ -222,25 +208,12 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
             mEndTimeDialog.show();
         } else if (v == mBtnUpdate) {
             updateEvent();
-        } else if (v == mBtnDelete) {
-            Database.delete(mEvent.getmEventId());
-            finish();
-        } else if (v == mBtnAddToCalendar) {
-            addToCalendar();
-        }
+        }// else if (v == mBtnCancel) {
+        //    super.finish();
+        //}
     }
 
-    private void addToCalendar() {
-        new AddToCalendarTask(this, credential, buildCalendarEvent()) {
-            @Override
-            protected void onPostExecute(Void result) {
-                following = true;
-                refreshCalendar();
-            }
-        }.execute();
-        mBtnAddToCalendar.setEnabled(false);
-    }
-
+    /**
     private com.google.api.services.calendar.model.Event buildCalendarEvent() {
 
         com.google.api.services.calendar.model.Event event = new com.google.api.services.calendar.model.Event();
@@ -255,7 +228,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
 
         return event;
     }
-
+    */
     private void updateEvent() {
         mEvent.setmEventName(mEditName.getText().toString());
         mEvent.setmEventLocation(mSpinnerLoc.getSelectedItem().toString());
@@ -283,7 +256,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         }
 
         Database.update(mEvent);
-
         finish();
     }
 
@@ -365,6 +337,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         text.setText(timeformat.format(cal.getTime()));
     }
 
+    /**
     private void refreshResults() {
         Log.v(TAG, "Refresh results");
 
@@ -388,7 +361,6 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
                                 }
                             }
                         }
-                        refreshCalendar();
                     }
                 }.execute();
 
@@ -423,7 +395,7 @@ public class UpdateActivity extends BaseActivity implements View.OnClickListener
         return true;
     }
 
-    /**
+
      @Override public boolean onOptionsItemSelected(MenuItem item) {
      switch (item.getItemId()) {
      case R.id.sign_out:

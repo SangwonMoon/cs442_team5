@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="team5_project.cs442.eventorganizer" >
+    package="team5_project.cs442.eventorganizer">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -31,6 +31,7 @@
         <activity
             android:name=".activities.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +45,6 @@
         <activity android:name=".activities.EventListViewActivity" >
         </activity>
 
-        EventListViewActivity
         <activity android:name=".event.EventDetailActivityForEventInfo" >
         </activity>
 
@@ -55,6 +55,12 @@
         </activity>
 
         <activity android:name=".activities.DetailActivity" >
+        </activity>
+
+        <activity android:name=".activities.TabActivity" >
+        </activity>
+
+        <activity android:name=".activities.MyEventDetailActivity" >
         </activity>
     </application>
 

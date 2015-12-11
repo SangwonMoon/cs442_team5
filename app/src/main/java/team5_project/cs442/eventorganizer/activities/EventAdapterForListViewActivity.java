@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import team5_project.cs442.eventorganizer.R;
@@ -35,7 +36,12 @@ public class EventAdapterForListViewActivity extends ArrayAdapter<Event> impleme
         final Event event = getItem(position);
 
         String event_name = event.getmEventName();
-        String event_start_time = String.valueOf(event.getmEventStartTime());
+
+        String event_start_time = new SimpleDateFormat("EEE  MMM d ''yy  hh:mm aaa").format(event.getmEventStartTime());
+        String event_end_time = new SimpleDateFormat("EEE  MMM d ''yy  hh:mm aaa").format(event.getmEventEndTime());
+
+       // String event_start_time = String.valueOf(event.getmEventStartTime());
+        //String event5_end_time = String.valueOf(event.getmEventEndTime());
 
         if (convertView == null) {
             event_view = new LinearLayout(getContext());
@@ -48,11 +54,12 @@ public class EventAdapterForListViewActivity extends ArrayAdapter<Event> impleme
         }
 
         TextView event_name_text = (TextView) event_view.findViewById(R.id.event_name_info);
-        TextView event_time_text = (TextView) event_view.findViewById(R.id.event_start_time_info);
+        TextView event_stime_text = (TextView) event_view.findViewById(R.id.event_start_time_info);
+        TextView event_etime_text = (TextView) event_view.findViewById(R.id.event_end_time_info);
 
         event_name_text.setText(event_name);
-        event_time_text.setText(event_start_time);
-
+        event_stime_text.setText(event_start_time);
+        event_etime_text.setText(event_end_time);
 
         return event_view;
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"-->
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -30,14 +30,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Event name"
+                        android:text="Event"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateName" />
 
-                    <EditText
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/editUpdateName"
-                        android:layout_weight="1" />
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -50,13 +52,14 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Location"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateLoc" />
 
-                    <Spinner
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/spinnerUpdateLoc"
-                        android:spinnerMode="dropdown" />
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -69,6 +72,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Start time"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateStart" />
 
                     <LinearLayout
@@ -83,7 +87,7 @@
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text=""
                             android:id="@+id/editUpdateStartDate"
-                            style="@android:style/Widget.DeviceDefault.Light.Spinner"/>
+                            android:textColor="@color/black"/>
 
                         <TextView
                             android:layout_width="fill_parent"
@@ -92,7 +96,7 @@
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text=""
                             android:id="@+id/editUpdateStartTime"
-                            style="@android:style/Widget.DeviceDefault.Light.Spinner"/>
+                            android:textColor="@color/black"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -107,6 +111,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="End time"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateEnd" />
 
                     <LinearLayout
@@ -121,7 +126,7 @@
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text=""
                             android:id="@+id/editUpdateEndDate"
-                            style="@android:style/Widget.DeviceDefault.Light.Spinner"/>
+                            android:textColor="@color/black"/>
 
                         <TextView
                             android:layout_width="fill_parent"
@@ -130,7 +135,7 @@
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:text=""
                             android:id="@+id/editUpdateEndTime"
-                            style="@android:style/Widget.DeviceDefault.Light.Spinner"/>
+                            android:textColor="@color/black"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -145,14 +150,16 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Description"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateDesc" />
 
-                    <EditText
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"
                         android:ems="10"
                         android:id="@+id/editUpdateDesc"
+                        android:textColor="@color/black"
                         android:layout_weight="1" />
                 </LinearLayout>
 
@@ -166,12 +173,14 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Host"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateHost" />
 
-                    <EditText
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/editUpdateHost"
+                        android:textColor="@color/black"
                         android:layout_weight="1" />
 
                 </LinearLayout>
@@ -185,15 +194,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Email"
+                        android:text="Creator's Email"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateEmail" />
 
-                    <EditText
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:ems="10"
                         android:id="@+id/editUpdateEmail"
+                        android:textColor="@color/black"
                         android:layout_weight="1" />
                 </LinearLayout>
 
@@ -207,34 +218,37 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="Cost"
+                        android:textColor="@color/red"
                         android:id="@+id/textUpdateCost" />
 
-                    <EditText
+                    <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
                         android:ems="10"
+                        android:textColor="@color/black"
                         android:id="@+id/editUpdateCost"
                         android:layout_weight="1" />
 
                 </LinearLayout>
 
+
             </LinearLayout>
         </ScrollView>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:padding="16dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <Button
+            style="@style/CustomButton"
+            android:text="Add to Calendar"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom|center_horizontal">
+            android:id="@+id/btnAddToCalendar"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add to Calendar"
-                android:id="@+id/btnAddToCalendar"/>
-
-        </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+<!--/RelativeLayout-->
